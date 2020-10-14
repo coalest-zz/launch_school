@@ -36,4 +36,10 @@ END
 # a method that takes an array of integers, and returns a new array with every other element 
 Casual
 
-Formal
+Define a method that accepts an array
+Go through each element of the array
+if the index is even
+  add the number to a new array
+Otherwise do nothing
+
+Print the new array
