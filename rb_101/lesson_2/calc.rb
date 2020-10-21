@@ -1,13 +1,25 @@
-puts 'Please give me two numbers!'
-num1 = gets.chomp
-num2 = gets.chomp
-puts 'Thanks! Now what would you like to do with those numbers?/n Type +,*,-, or /'
-type = gets.chomp
-case type
-when '+' then puts "Your result is #{num1.to_i + num2.to_i}"
-when '*' then puts "Your result is #{num1.to_i * num2.to_i}"
-when '/' then puts "Your result is #{num1.to_f / num2.to_f}"
-when '-' then puts "Your result is #{num1.to_i - num2.to_i}"
-else
-  puts "Sorry, that's not a valid operation."
+def prompt(message)
+  puts "==> #{message}"
 end
+
+prompt('Please give me one number!')
+num1 = gets.chomp
+
+prompt('Please give me a second number!')
+num2 = gets.chomp
+
+prompt('Thanks! Now what would you like to do with those numbers?/n Type +,*,-, or /')
+operator = gets.chomp
+
+result = case operator
+         when '+' 
+          then prompt("Your result is #{num1.to_i + num2.to_i}")
+         when '*' 
+          then prompt("Your result is #{num1.to_i * num2.to_i}")
+         when '/' 
+          then prompt("Your result is #{num1.to_f / num2.to_f}")
+         when '-' 
+          then prompt("Your result is #{num1.to_i - num2.to_i}")
+         else
+          prompt("Sorry, that's not a valid operator.")
+         end
