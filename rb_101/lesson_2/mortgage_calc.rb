@@ -6,7 +6,7 @@ def valid_num(num)
   num.to_f > 0
 end
 
-prompt "Sorry to hear that you're settling down. Let me help you calculate your mortgage expenses."
+prompt "Welcome to this mortgage calculator."
 
 loan_amount = ''
 apr = ''
@@ -39,7 +39,7 @@ loop do
 
   prompt "And how long is your loan for (in years)?"
 
-  loop do 
+  loop do
     loan_length_yrs = gets.chomp
     if valid_num(loan_length_yrs)
       break
@@ -50,16 +50,16 @@ loop do
 
   loan_length_months = loan_length_yrs.to_f * 12
   monthly_int_rate = apr.to_f / 100 / 12
+  # m = p * (j / (1 - (1 + j)**(-n)))
   monthly_payment = loan_amount.delete('^0-9').to_f * (monthly_int_rate / (1 - (1 + monthly_int_rate)**(-loan_length_months)))
-  #m = p * (j / (1 - (1 + j)**(-n)))
 
   prompt "Calculating..."
   sleep 2
-  prompt "That would make your monthly payment equal to $#{monthly_payment.round(2)}!"
+  prompt "That would make your monthly payment $#{monthly_payment.round(2)}!"
   sleep 1
   prompt "Would you like to input new information?"
   answer = gets.chomp
-  if answer.downcase.start_with? "y"
+  if answer.downcase.start_withgit? "y"
     prompt "Okay! Let's run it again with new numbers!"
   else
     break
@@ -67,8 +67,3 @@ loop do
 end
 
 prompt "Thanks for using the calculator. Hope you enjoyed it!"
-
-
-
-
-
