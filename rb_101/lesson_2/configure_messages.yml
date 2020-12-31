@@ -1,0 +1,3 @@
+welcome: "Welcome to my first calculator app. Enter your name:"
+name_error: "Make sure to use a valid name"
+welcome_name: "Hello #{name}! Hope you enjoy this calculator!"
