@@ -7,9 +7,14 @@
 # Kernel.puts(answer)
 require 'yaml'
 MESSAGES = YAML.load_file('configure_messages.yml')
+LANGUAGE = 'en'
 
 def valid_number?(num)
   num.to_i.to_s == num || num.to_f.to_s == num
+end
+
+def messages(message, lang='en')
+  MESSAGES[lang][message]
 end
 
 def prompt(message)
@@ -31,19 +36,19 @@ def operator_to_message(num)
   num
 end
 
-prompt(MESSAGES['welcome'])
+prompt(MESSAGES['en']['welcome'])
 
 name = ''
 loop do
   name = gets.chomp
   if name.empty?
-    prompt(MESSAGES['name_error'])
+    prompt(MESSAGES['en']['name_error'])
   else
     break
   end
 end
 
-prompt(MESSAGES['welcome_name'])
+prompt('welcome_name')
 
 num1 = ''
 num2 = ''
