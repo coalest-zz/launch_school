@@ -1,11 +1,21 @@
-def multisum(number)
+# def multisum(number)
+#   multiples = []
+#   1.upto(number) do |i| 
+#     if x % 3 == 0 || x % 5 == 0
+#       multiples << i
+#     end
+#   end
+#   multiples.sum
+# end
+
+def multisum(num)
   multiples = []
-  1.upto(number) do |i| 
+  1.upto(num) do |x| 
     if x % 3 == 0 || x % 5 == 0
-      multiples << i
+      multiples << x
     end
   end
-  multiples.sum
+  multiples.inject(:+)
 end
 
 puts multisum(3) == 3
