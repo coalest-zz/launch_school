@@ -1,6 +1,9 @@
 def word_sizes(sentence)
-  counter = {}
-  sentences.split(" ").gsub()
+  words = sentence.split(" ")
+  words.each_with_object({}) do |word, h|
+    key = word.length
+    h.has_key?(key) ? (h[key] += 1) : (h[key] = 1)
+  end
 end
 
 puts word_sizes('Four score and seven.') == { 3 => 1, 4 => 1, 5 => 1, 6 => 1 }
