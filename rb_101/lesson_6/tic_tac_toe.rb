@@ -19,19 +19,19 @@ end
 def display_board(brd)
   system 'clear'
   puts "Reminder: You're #{PLAYER_MARKER}. Computer's #{COMPUTER_MARKER}."
-  puts ""
-  puts "     |     |"
-  puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}"
-  puts "     |     |"
-  puts "-----|-----|-----"
-  puts "     |     |"
-  puts "  #{brd[4]}  |  #{brd[5]}  |  #{brd[6]}"
-  puts "     |     |"
-  puts "-----|-----|-----"
-  puts "     |     |"
-  puts "  #{brd[7]}  |  #{brd[8]}  |  #{brd[9]}"
-  puts "     |     |"
-  puts ""
+  puts " _________________ "
+  puts "|     |     |     |"
+  puts "|  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}  |"
+  puts "|     |     |     |"
+  puts "|-----|-----|-----|"
+  puts "|     |     |     |"
+  puts "|  #{brd[4]}  |  #{brd[5]}  |  #{brd[6]}  |"
+  puts "|     |     |     |"
+  puts "|-----|-----|-----|"
+  puts "|     |     |     |"
+  puts "|  #{brd[7]}  |  #{brd[8]}  |  #{brd[9]}  |"
+  puts "|_____|_____|_____|"
+  puts ''
 end
 # rubocop:enable Metrics/AbcSize
 
@@ -77,12 +77,13 @@ def find_key_square(brd, marker)
 end
 
 def computer_places_piece(brd)
+  sleep(0.5)
+
   square = find_key_square(brd, COMPUTER_MARKER)
   square = find_key_square(brd, PLAYER_MARKER) if !square
   square = 5 if !square && brd[5] == INITIAL_MARKER
   square = empty_squares(brd).sample if !square
 
-  sleep(0.5)
   brd[square] = COMPUTER_MARKER
 end
 
@@ -125,7 +126,7 @@ loop do
     answer = gets.chomp
     if answer == 'choose'
       current_player = VALID_PLAYERS[0..1].sample
-      prompt "#{current_player} was chosen!"
+      prompt "The #{current_player} was chosen!"
       sleep(1)
       break
     elsif VALID_PLAYERS.include?(answer)
