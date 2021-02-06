@@ -4,6 +4,7 @@ require 'pry-byebug'
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
+GAMES_TO_WIN = 5
 
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # columns
@@ -13,6 +14,14 @@ VALID_PLAYERS = ['player', 'computer', 'choose']
 
 def prompt(string)
   puts "==> #{string}"
+end
+
+def welcome_message
+  puts ''
+  puts "=========================================================="
+  puts "  Welcome to Tic Tac Toe! The first to win 5 games wins!"
+  puts "=========================================================="
+  puts ''
 end
 
 # rubocop:disable Metrics/AbcSize
@@ -60,7 +69,8 @@ def player_places_piece(brd)
   square = ''
   loop do
     prompt("Choose a square (#{joinor(empty_squares(brd))}):")
-    square = gets.chomp.to_i
+    square = gets.chomp
+    square = square.to_i if square.to_i.to_s == square
     break if empty_squares(brd).include?(square)
     prompt("Sorry that's not a valid choice")
   end
@@ -114,64 +124,88 @@ def someone_won?(brd)
   !!detect_winner(brd)
 end
 
-player_score = 0
-computer_score = 0
+def update_score(user, score)
+  user == 'Player' ? score[:player] += 1 : score[:computer] += 1
+end
 
-loop do
-  board = initialize_board
-  current_player = ''
-
+def choose_first_player
+  first_player = ''
   loop do
     prompt "Who should go first? ('player', 'computer', 'choose')"
-    answer = gets.chomp
-    if answer == 'choose'
-      current_player = VALID_PLAYERS[0..1].sample
-      prompt "The #{current_player} was chosen!"
+    answer = gets.chomp.downcase
+    if VALID_PLAYERS[0..1].include?(answer)
+      first_player = answer
+      break
+    elsif answer == VALID_PLAYERS[2]
+      first_player = VALID_PLAYERS[0..1].sample
+      prompt "The #{first_player} was chosen!"
       sleep(1)
       break
-    elsif VALID_PLAYERS.include?(answer)
-      current_player = answer
-      break
     else
-      prompt "Please try again."
+      prompt "Typo? Please try again."
     end
   end
+  first_player
+end
 
+def display_match_winner(board, score)
+  if someone_won?(board)
+    winner = detect_winner(board)
+    update_score(winner, score)
+    prompt "#{winner} won this round!"
+  else
+    prompt "It's a tie!"
+  end
+end
+
+def display_tourney_winner(score)
+  if score[:player] == GAMES_TO_WIN
+    prompt "You won the tournament! Congrats!"
+  elsif score[:computer] == GAMES_TO_WIN
+    prompt "The computer won the tournament. :( Better luck next time."
+  end
+end
+
+def game_round(board, current_player)
   loop do
     display_board(board)
     place_piece!(board, current_player)
     current_player = alternate_player(current_player)
     break if someone_won?(board) || board_full?(board)
   end
+end
 
+score = { player: 0, computer: 0 }
+
+loop do
+  board = initialize_board
+
+  system 'clear'
+
+  welcome_message
+
+  current_player = choose_first_player
+
+  game_round(board, current_player)
   display_board(board)
+  display_match_winner(board, score)
 
-  if someone_won?(board)
-    case detect_winner(board)
-    when 'Player'
-      player_score += 1
-    when 'Computer'
-      computer_score += 1
-    end
+  prompt "Player score: #{score[:player]}. Computer score: #{score[:computer]}"
 
-    prompt "#{detect_winner(board)} won this round!"
-  else
-    prompt "It's a tie!"
-  end
-
-  prompt "Player score: #{player_score}. Computer score: #{computer_score}"
-
-  if player_score == 5
-    prompt "You won the tournament! Congrats!"
-    break
-  elsif computer_score == 5
-    prompt "The computer won the tournament. :( Better luck next time."
+  if score.values.any?(GAMES_TO_WIN)
+    display_tourney_winner(score)
     break
   end
 
-  prompt "Do you want to play again? (y/n)"
-  response = gets.chomp
-  break unless response.start_with?('y')
+  prompt "Do you want to play again? (y)es or (n)o"
+  response = ''
+  loop do
+    response = gets.chomp
+    break if ['yes', 'y', 'no', 'n'].include?(response)
+    prompt "Sorry, I only understand yes/y and no/n."
+  end
+
+  break unless ['y', 'yes'].include?(response)
 end
 
 prompt "Thanks for playing!"
