@@ -116,7 +116,7 @@ def determine_winner(totals_hsh)
 end
 
 def play_again?
-  prompt "Do you want to play again? (y)es or (n)o"
+  prompt "Continue to next round? (y)es or (n)o"
   loop do
     response = gets.chomp.downcase
     return true if ['yes', 'y'].include?(response)
